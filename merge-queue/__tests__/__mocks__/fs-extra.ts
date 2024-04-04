@@ -1,0 +1,65 @@
+async function readFile(): Promise<Buffer> {
+  return Buffer.from(`
+[application]
+name = "my-first"
+enable = true
+
+[application.workflows]
+provider = "github_actions"
+excluded_workflows = ["release"]
+
+[[application.namespaces]]
+type = "prod"
+
+[application.namespaces.build]
+build_workflow = "prod_workflow"
+
+[application.namespaces.delivery]
+target = "prod"
+base_replica = 3
+rollout_strategy = "rolling_upgrade"
+
+[application.namespaces.appsignal]
+enable = true
+environment = "appsignal"
+default_namespace = "prod"
+
+[application.namespaces.honeycomb]
+enable = true
+dataset = "honeycomb"
+
+[application.namespaces.cloudsql]
+enable = true
+project_id = "google cloud"
+
+[[application.namespaces]]
+type = "staging"
+
+[application.namespaces.build]
+build_workflow = "staging_workflow"
+
+[application.namespaces.delivery]
+target = "staging"
+base_replica = 4
+rollout_strategy = "blue_green"
+
+[application.namespaces.appsignal]
+enable = true
+environment = "appsignal"
+default_namespace = "staging"
+
+[application.namespaces.honeycomb]
+enable = true
+dataset = "honey"
+
+[application.namespaces.cloudsql]
+enable = true
+project_id = "google"
+
+[application.addons]
+`)
+}
+
+export default {
+  readFile
+}
