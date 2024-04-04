@@ -1,6 +1,0 @@
-{
-  "name": "@gitops-gh-action/root",
-  "version": "1.0.0",
-  "private": true,
-  "workspaces": ["merge-queue/*"]
-}
