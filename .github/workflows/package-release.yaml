@@ -29,6 +29,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set version
+        id: version
+        run: |
+          echo "v${version}-b${{ vars.GITHUB_RUN_ID }}.${{ vars.GITHUB_RUN_NUMBER }}"
+
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v4
         with:
