@@ -1,5 +1,5 @@
 name: Package Release
-run-name: ${{ inputs.package }} (${{ inputs.channel }})
+run-name: ${{ inputs.package }} / ${{ inputs.version }}
 
 on:
   workflow_dispatch:
@@ -48,11 +48,12 @@ jobs:
           GH_RUN_NUMBER: ${{ github.run_number }}
         run: |
           TAG_NAME=$(npm version ${VERSION} --commit-hooks false --git-tag-version false)
+          PACKAGE_TITLE=$(echo "$PACKAGE" | sed -E 's/(^|-)([a-z])/\U\2/g')
           zip -r dist.zip ./$PACKAGE/dist
 
           release_args=(
             "${TAG_NAME}-b${GH_RUN_ID}.${GH_RUN_NUMBER}"
-            --title "${PACKAGE} ${TAG_NAME#v}"
+            --title "${PACKAGE_TITLE} ${TAG_NAME#v}"
             --target "$GITHUB_SHA"
             --generate-notes
           )
