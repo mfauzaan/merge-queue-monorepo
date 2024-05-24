@@ -9,6 +9,7 @@ on:
         description: package
         options: 
         - merge-queue
+        - wukong-cli
       version:
         type: choice
         description: Next Release version
@@ -49,11 +50,10 @@ jobs:
           zip -r dist.zip ./dist
 
           TAG_NAME=$(npm version ${VERSION} --commit-hooks false --git-tag-version false)
-          PACKAGE_TITLE=$(echo "$PACKAGE" | sed 's/\([.!?] [a-z]\| i \)/\U\1/g') 
 
           release_args=(
             "${TAG_NAME}-b${GH_RUN_ID}.${GH_RUN_NUMBER}"
-            --title "${PACKAGE_TITLE} ${TAG_NAME#v}"
+            --title "${PACKAGE} ${TAG_NAME}"
             --target "$GITHUB_SHA"
             --generate-notes
           )
