@@ -1,5 +1,5 @@
 name: Package Release
-run-name: ${{ inputs.tag_name }} / ${{ inputs.environment }}
+run-name: ${{ inputs.tag_name }} / ${{ inputs.channel }}
 
 # on:
 #   pull_request:
@@ -50,7 +50,6 @@ jobs:
           TAG_NAME: ${{ inputs.tag_name }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          popd
           release_args=(
             "$TAG_NAME"
             --title "GitHub CLI ${TAG_NAME#v}"
