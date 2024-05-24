@@ -37,12 +37,6 @@ jobs:
         with:
           node-version: "lts/*"
 
-      - name: Move to PACKAGE directory
-        env:
-          PACKAGE: ${{ inputs.package }}
-        run: |
-          cd ./$PACKAGE
-
       - name: Create the release
         env:
           PACKAGE: ${{ inputs.package }}
@@ -51,9 +45,11 @@ jobs:
           GH_RUN_ID: ${{ github.run_id }}
           GH_RUN_NUMBER: ${{ github.run_number }}
         run: |
+          cd ./$PACKAGE
+          zip -r dist.zip ./$PACKAGE/dist
+
           TAG_NAME=$(npm version ${VERSION} --commit-hooks false --git-tag-version false)
           PACKAGE_TITLE=$(echo "$PACKAGE" | sed -E 's/(^| |-)([a-z])/\U\2/g')
-          zip -r dist.zip ./$PACKAGE/dist
 
           release_args=(
             "${TAG_NAME}-b${GH_RUN_ID}.${GH_RUN_NUMBER}"
