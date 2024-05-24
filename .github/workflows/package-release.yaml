@@ -63,7 +63,7 @@ jobs:
             release_args+=( --discussion-category "General" )
           fi
 
-          script/label-assets dist/gh_* | xargs echo gh release create "${release_args[@]}" --
+          script/label-assets merge-queue/dist* | xargs echo gh release create "${release_args[@]}" --
 
       # - name: Setup Node.js
       #   uses: actions/setup-node@v3
