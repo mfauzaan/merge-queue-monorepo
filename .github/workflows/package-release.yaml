@@ -18,8 +18,6 @@ on:
           - "prerelease"
           - "patch"
 
-
-
 permissions: 
   contents: write
 
@@ -38,6 +36,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "lts/*"
+
+      - name: Move to PACKAGE directory
+        env:
+          PACKAGE: ${{ inputs.package }}
+        run: |
+          cd ./$PACKAGE
 
       - name: Create the release
         env:
@@ -63,4 +67,6 @@ jobs:
           fi
 
           gh release create "${release_args[@]}" --
+          git add package.json package-lock.json
+          git add c "(${PACKAGE}): Version bumped to ${TAG_NAME}"
           git push
