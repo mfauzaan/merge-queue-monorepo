@@ -37,15 +37,15 @@ jobs:
       - name: Create the release
         env:
           DO_PUBLISH: ${{ inputs.channel == 'production' }}
+          PACKAGE: ${{ inputs.package }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TAG_NAME=$(npm version patch --commit-hooks false --git-tag-version false)
-          zip -r dist.zip ./merge-queue/dist
+          zip -r dist.zip ./$PACKAGE/dist
 
           release_args=(
             "$TAG_NAME"
-            "dist.zip#Display"
-            --title "GitHub CLI ${TAG_NAME#v}"
+            --title "${PACKAGE} ${TAG_NAME#v}"
             --target "$GITHUB_SHA"
             --generate-notes
           )
@@ -55,11 +55,7 @@ jobs:
           fi
 
           gh release create "${release_args[@]}" --
-
-          # git add packages
-          # git commit -m "Add rpm and deb packages for $TAG_NAME"
           git push
-
 
       # - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
       #   run: npm audit signatures
