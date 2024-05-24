@@ -9,14 +9,19 @@ on:
         description: package
         options: 
         - merge-queue
-      channel:
-        type: choice 
-        description: release channel
-        options: 
-        - stable
-        - beta
+      version:
+        type: choice
+        description: Next Release version
+        options:
+          - "major"
+          - "minor"
+          - "patch"
+          - "prerelease"
 
-permissions: write-all
+
+
+permissions: 
+  contents: write
 
 jobs:
   release:
@@ -37,15 +42,16 @@ jobs:
       - name: Create the release
         env:
           PACKAGE: ${{ inputs.package }}
+          VERSION: ${{ inputs.version }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_RUN_ID: ${{ github.run_id }}
           GH_RUN_NUMBER: ${{ github.run_number }}
         run: |
-          TAG_NAME=$(npm version patch --commit-hooks false --git-tag-version false)
+          TAG_NAME=$(npm version ${VERSION} --commit-hooks false --git-tag-version false)
           zip -r dist.zip ./$PACKAGE/dist
 
           release_args=(
-            "$TAG_NAME${version}-b${GH_RUN_ID}.${GH_RUN_NUMBER}"
+            "${TAG_NAME}-b${GH_RUN_ID}.${GH_RUN_NUMBER}"
             --title "${PACKAGE} ${TAG_NAME#v}"
             --target "$GITHUB_SHA"
             --generate-notes
@@ -57,26 +63,3 @@ jobs:
 
           gh release create "${release_args[@]}" --
           git push
-
-      # - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
-      #   run: npm audit signatures
-
-      # - name: Release
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   run: npx semantic-release -t 'v${version}-b${{ github.run_id }}.${{ github.run_number }}'
-    # steps:
-    #   - name: Checkout
-    #     uses: actions/checkout@v4
-    #     with:
-    #       fetch-depth: 0
-
-    #   - name: Semantic Release
-    #     uses: cycjimmy/semantic-release-action@v4
-    #     with:
-    #       semantic_version: 23.1.1
-    #       tag_format: v${version}-b${{ github.run_id }}.${{ github.run_number }}
-    #     env:
-    #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
