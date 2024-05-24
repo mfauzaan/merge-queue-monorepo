@@ -62,6 +62,9 @@ jobs:
             release_args+=( --prerelease )
           fi
 
+          git config user.name "GitHub Release Action"
+          git config user.email "<>"
+
           gh release create "${release_args[@]}" --
           git add package.json package-lock.json
           git commit -m "(${PACKAGE}): Version bumped to ${TAG_NAME}"
