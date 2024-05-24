@@ -59,8 +59,6 @@ jobs:
 
           if [[ $TAG_NAME == *-* ]]; then
             release_args+=( --prerelease )
-          else
-            release_args+=( --discussion-category "General" )
           fi
 
           gh release create "${release_args[@]}" --
