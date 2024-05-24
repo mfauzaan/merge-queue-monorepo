@@ -46,7 +46,7 @@ jobs:
           GH_RUN_NUMBER: ${{ github.run_number }}
         run: |
           cd ./$PACKAGE
-          zip -r dist.zip ./$PACKAGE/dist
+          zip -r dist.zip ./dist
 
           TAG_NAME=$(npm version ${VERSION} --commit-hooks false --git-tag-version false)
           PACKAGE_TITLE=$(echo "$PACKAGE" | sed -E 's/(^| |-)([a-z])/\U\2/g')
