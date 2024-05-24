@@ -14,9 +14,11 @@ on:
         type: string
         description: Tag name
       channel:
-        default: production
-        type: environment
+        type: choice 
         description: release channel
+        options: 
+        - stable
+        - beta
 
 permissions:
   contents: read # for checkout
