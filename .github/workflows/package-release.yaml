@@ -39,7 +39,7 @@ jobs:
           DO_PUBLISH: ${{ inputs.channel == 'production' }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          npm version minor
+          $TAG_NAME = echo(npm version patch --commit-hooks false --git-tag-version false)
           zip -r dist.zip ./merge-queue/dist
 
           release_args=(
