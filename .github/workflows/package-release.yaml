@@ -49,7 +49,7 @@ jobs:
           zip -r dist.zip ./dist
 
           TAG_NAME=$(npm version ${VERSION} --commit-hooks false --git-tag-version false)
-          PACKAGE_TITLE=$(echo "${text}" | tr '[:lower:]' '[:upper:]' | sed 's/\b\w+\b/\U&\b/g')
+          PACKAGE_TITLE=$(echo "$PACKAGE" | sed 's/\([.!?] [a-z]\| i \)/\U\1/g') 
 
           release_args=(
             "${TAG_NAME}-b${GH_RUN_ID}.${GH_RUN_NUMBER}"
