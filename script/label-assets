@@ -1,0 +1,14 @@
+#!/bin/bash
+set -e
+
+if [ $# -eq 0 ]; then
+  echo "usage: script/label-assets dist/gh_*" >&2
+  exit 1
+fi
+
+for asset; do
+  label="$(basename "$asset")"
+  label="${label%.*}"
+  label="GitHub CLI $(tr '_' ' ' <<<"${label#gh_}")"
+  printf '"%s#%s"\n' "$asset" "$label"
+done
