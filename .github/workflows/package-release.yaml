@@ -61,7 +61,11 @@ jobs:
             release_args+=( --discussion-category "General" )
           fi
 
-          xargs echo gh release create "${release_args[@]}" --
+          gh release create "${release_args[@]}" --
+
+          git add packages
+          # git commit -m "Add rpm and deb packages for $TAG_NAME"
+          git push
 
       # - name: Setup Node.js
       #   uses: actions/setup-node@v3
