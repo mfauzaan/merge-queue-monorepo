@@ -13,10 +13,10 @@ on:
         type: choice
         description: Next Release version
         options:
-          - "major"
           - "minor"
-          - "patch"
+          - "major"
           - "prerelease"
+          - "patch"
 
 
 
