@@ -34,14 +34,12 @@ jobs:
         with:
           node-version: "lts/*"
 
-      - name: Install dependencies
-        run: npm clean-install
-
       - name: Create the release
         env:
           DO_PUBLISH: ${{ inputs.channel == 'production' }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          npm version minor
           zip -r dist.zip ./merge-queue/dist
 
           release_args=(
