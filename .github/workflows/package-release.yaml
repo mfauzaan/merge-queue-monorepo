@@ -63,7 +63,7 @@ jobs:
 
           gh release create "${release_args[@]}" --
 
-          git add packages
+          # git add packages
           # git commit -m "Add rpm and deb packages for $TAG_NAME"
           git push
 
