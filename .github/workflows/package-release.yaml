@@ -36,15 +36,16 @@ jobs:
 
       - name: Create the release
         env:
-          DO_PUBLISH: ${{ inputs.channel == 'production' }}
           PACKAGE: ${{ inputs.package }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_RUN_ID: ${{ github.run_id }}
+          GH_RUN_NUMBER: ${{ github.run_number }}
         run: |
           TAG_NAME=$(npm version patch --commit-hooks false --git-tag-version false)
           zip -r dist.zip ./$PACKAGE/dist
 
           release_args=(
-            "$TAG_NAME"
+            "$TAG_NAME${version}-b${GH_RUN_ID}.${GH_RUN_NUMBER}"
             --title "${PACKAGE} ${TAG_NAME#v}"
             --target "$GITHUB_SHA"
             --generate-notes
