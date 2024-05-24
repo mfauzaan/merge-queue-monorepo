@@ -47,9 +47,11 @@ jobs:
           TAG_NAME: ${{ inputs.tag_name }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          zip -r dist.zip ./merge-queue/dist
+
           release_args=(
             "$TAG_NAME"
-            "./merge-queue/dist#Display"
+            "dist.zip#Display"
             --title "GitHub CLI ${TAG_NAME#v}"
             --target "$GITHUB_SHA"
             --generate-notes
