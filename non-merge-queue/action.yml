@@ -1,0 +1,24 @@
+name: 'Wukong'
+description: 'Validate and sync wukong config'
+author: 'Mindvalley'
+
+# Add your action's branding here. This will appear on the GitHub Marketplace.
+branding:
+  icon: 'heart'
+  color: 'red'
+
+# Define your inputs here.
+inputs:
+  base_url:
+    description: 'Wukong base URL'
+    required: true
+  secret:
+    description: 'Secret key'
+    required: true
+  is_canary:
+    description: 'Force to use canary API'
+
+
+runs:
+  using: node20
+  main: dist/index.js
