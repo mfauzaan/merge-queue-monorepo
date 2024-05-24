@@ -61,7 +61,7 @@ jobs:
             release_args+=( --discussion-category "General" )
           fi
 
-          echo gh release create "${release_args[@]}" --
+          xargs echo gh release create "${release_args[@]}" --
 
       # - name: Setup Node.js
       #   uses: actions/setup-node@v3
