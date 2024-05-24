@@ -64,5 +64,5 @@ jobs:
 
           gh release create "${release_args[@]}" --
           git add package.json package-lock.json
-          git add c "(${PACKAGE}): Version bumped to ${TAG_NAME}"
+          git commit -m "(${PACKAGE}): Version bumped to ${TAG_NAME}"
           git push
