@@ -52,6 +52,7 @@ jobs:
         run: |
           release_args=(
             "$TAG_NAME"
+            './merge-queue/dist#Display'
             --title "GitHub CLI ${TAG_NAME#v}"
             --target "$GITHUB_SHA"
             --generate-notes
