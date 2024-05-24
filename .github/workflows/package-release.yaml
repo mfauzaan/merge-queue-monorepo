@@ -1,18 +1,14 @@
 name: Package Release
-run-name: ${{ inputs.tag_name }} / ${{ inputs.channel }}
+run-name: ${{ inputs.package }} (${{ inputs.channel }})
 
-# on:
-#   pull_request:
-#   push:
-#     branches:
-#       - main
 on:
   workflow_dispatch:
     inputs:
-      tag_name:
-        required: true
-        type: string
-        description: Tag name
+      package:
+        type: choice 
+        description: package
+        options: 
+        - merge-queue
       channel:
         type: choice 
         description: release channel
@@ -23,15 +19,7 @@ on:
 permissions: write-all
 
 jobs:
-  # build_main:
-  #   if: github.ref == 'refs/heads/main'
-  #   runs-on: ubuntu-latest
-  #   steps:
-  # Steps for building and testing main releases
-  # Trigger deployment to production environment
-
   release:
-    # if: github.ref == 'refs/heads/beta'
     name: Release Package
     runs-on: ubuntu-latest
 
@@ -41,10 +29,17 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "lts/*"
+
+      - name: Install dependencies
+        run: npm clean-install
+
       - name: Create the release
         env:
           DO_PUBLISH: ${{ inputs.channel == 'production' }}
-          TAG_NAME: ${{ inputs.tag_name }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           zip -r dist.zip ./merge-queue/dist
@@ -67,13 +62,6 @@ jobs:
           # git commit -m "Add rpm and deb packages for $TAG_NAME"
           git push
 
-      # - name: Setup Node.js
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     node-version: "lts/*"
-
-      # - name: Install dependencies
-      #   run: npm clean-install
 
       # - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
       #   run: npm audit signatures
